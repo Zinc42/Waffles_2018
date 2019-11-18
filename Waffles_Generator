@@ -1,0 +1,81 @@
+import java.io.*;
+import java.util.*;
+public class Generator{
+  public static void main (String [] args) throws IOException{
+      BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+    // Use StringTokenizer vs. readLine/split -- lots faster
+    //System.out.println("Case #1: POSSIBLE");
+    List<String> myList = new ArrayList<String>();
+    String line;
+    while ((line = in.readLine()) != null) {
+        //StringTokenizer st = new StringTokenizer(line);
+        myList.add(line);
+    }
+    String[] tokenList = new String[myList.size()];
+    for(int i=0;i<myList.size();i++){
+      tokenList[i]=myList.get(i);
+    }
+   
+    int number = Integer.parseInt(myList.get(0));
+   
+    
+     
+     
+     
+    //input waffle to function
+    int format_line = 1;
+    int start_line = 2;
+    for (int k=0; k<number; k++){
+      //establish matrix for each case
+      String[] tokenList2 = new String[myList.size()];
+    for(int i=0;i<myList.size();i++){
+      tokenList2[i]=myList.get(i);
+    }
+    
+      StringTokenizer mn = new StringTokenizer(tokenList2[format_line]);
+      int row = Integer.parseInt(mn.nextToken());
+      int column = Integer.parseInt(mn.nextToken());
+      int horizontal = Integer.parseInt(mn.nextToken());
+      int vertical = Integer.parseInt(mn.nextToken());
+      //System.out.println(row+" "+column+ " " +horizontal);
+      //matrix
+          for(int i=0;i<myList.size();i++){
+      tokenList[i]=myList.get(i).replace(""," ");
+    }
+      String[][] matrix = new String[row][column];
+      for(int i=start_line;i<row+start_line;i++){
+        StringTokenizer mn2 = new StringTokenizer(tokenList[i]);
+        for(int j=0;j<column;j++){
+          matrix[i-start_line][j]=(mn2.nextToken());
+        }
+      }
+      System.out.println(number);
+      waffle(row, column, horizontal, vertical, matrix);
+      format_line+=row+1;
+      start_line +=row+1;
+      }
+    }
+    public static void waffle(int r, int c, int h, int v, String[][] matrix){
+        
+        String[][] matrix2 = new String[r*(h+1)][c*(v+1)];
+        
+        for(int i=0;i<matrix2.length;i++){
+            for(int j=0;j<matrix2[i].length;j++){
+                double q=i;
+                double w=j;
+                int a=(int)q%(r);
+                int s =(int)w%(c);
+                matrix2[i][j]=matrix[a][s];
+            }
+        }
+        System.out.println(r*(h+1)+" "+c*(v+1)+" "+h+" "+v);
+        for(int i=0;i<matrix2.length;i++){
+            for(int j=0;j<matrix2[i].length;j++){
+                System.out.print(matrix2[i][j]);
+            }
+            System.out.println();
+        }
+        
+        
+    }
+}
