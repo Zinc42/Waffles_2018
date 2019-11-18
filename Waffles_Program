@@ -1,0 +1,213 @@
+import java.io.*;
+import java.util.*;
+public class Main{
+  public static void main (String [] args) throws IOException{
+      BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+    // Use StringTokenizer vs. readLine/split -- lots faster
+    //System.out.println("Case #1: POSSIBLE");
+    List<String> myList = new ArrayList<String>();
+    String line;
+    while ((line = in.readLine()) != null) {
+        //StringTokenizer st = new StringTokenizer(line);
+        myList.add(line);
+    }
+    String[] tokenList = new String[myList.size()];
+    for(int i=0;i<myList.size();i++){
+      tokenList[i]=myList.get(i);
+    }
+   
+    int number = Integer.parseInt(myList.get(0));
+   
+
+    //input waffle to function
+    int format_line = 1;
+    int start_line = 2;
+    for (int k=0; k<number; k++){
+      //establish matrix for each case
+      String[] tokenList2 = new String[myList.size()];
+    for(int i=0;i<myList.size();i++){
+      tokenList2[i]=myList.get(i);
+    }
+    
+      StringTokenizer mn = new StringTokenizer(tokenList2[format_line]);
+      int row = Integer.parseInt(mn.nextToken());
+      int column = Integer.parseInt(mn.nextToken());
+      int horizontal = Integer.parseInt(mn.nextToken());
+      int vertical = Integer.parseInt(mn.nextToken());
+      //System.out.println(row+" "+column+ " " +horizontal);
+      //matrix
+          for(int i=0;i<myList.size();i++){
+      tokenList[i]=myList.get(i).replace(""," ");
+    }
+      String[][] matrix = new String[row][column];
+      for(int i=start_line;i<row+start_line;i++){
+        StringTokenizer mn2 = new StringTokenizer(tokenList[i]);
+        for(int j=0;j<column;j++){
+          matrix[i-start_line][j]=(mn2.nextToken());
+        }
+      }
+      System.out.println("Case #"+(k+1)+": "+waffle(row, column, horizontal, vertical, matrix));
+      format_line+=row+1;
+      start_line +=row+1;
+      }
+    }
+   
+  public static String waffle(int r, int c, int h, int v, String[][] matrix){
+    for(int o=0;o<r;o++){
+        for(int p=0;p<c;p++){
+          //System.out.print(matrix[o][p]+ " ");
+        }
+       // System.out.println();
+    }
+    //-------------------------rows cummulative lists
+    int[] numberRow = new int[r];
+     for(int i=0;i<r;i++){
+       for(int j=0;j<c;j++){
+         if (matrix[i][j].equals("@")){
+           numberRow[i]++;
+         }
+       }  
+     }
+    double[] cumRow = new double[r];
+    cumRow[0]=numberRow[0];
+    for(int i=1;i<r;i++){
+      cumRow[i]=numberRow[i]+cumRow[i-1];
+    }
+    for(int i=0;i<r;i++){
+      //System.out.print(cumRow[i]+" ");
+    }
+    //System.out.println();
+   
+   
+   
+    //row cuts
+    
+    List<Integer> rowcut = new ArrayList<Integer>();
+      //average number numebr
+      double averageNum = cumRow[cumRow.length-1]/(h+1);
+      //each row
+      //System.out.println(averageNum);
+      //interval list
+        rowcut.add(0);
+        if(averageNum==0){
+           return "POSSIBLE";
+         }else if(cumRow[0]%averageNum==0 &&cumRow[0]!=0){
+           rowcut.add(1);
+         }
+       for(int i=1;i<cumRow.length-1;i++){
+         if(averageNum==0){
+           return "POSSIBLE";
+         }else if(cumRow[i]%averageNum==0 &&cumRow[i]!=cumRow[i-1] &&cumRow[i]!=cumRow[cumRow.length-1]){
+           rowcut.add(i+1);
+         }
+       }
+        rowcut.add(matrix.length);
+     
+      for(int i=0;i<rowcut.size();i++){
+       // System.out.print(rowcut.get(i)+" ");
+      }
+    // System.out.println(" ");
+ //---------------------------------------------column list things  
+    int[] numberCol = new int[c];
+    for(int j=0;j<c;j++){
+     for(int i=0;i<r;i++){
+         if (matrix[i][j].equals("@")){
+           numberCol[j]++;
+         }
+       }  
+     }
+    double[] cumCol = new double[c];
+    cumCol[0]=numberCol[0];
+    for(int i=1;i<c;i++){
+      cumCol[i]=numberCol[i]+cumCol[i-1];
+    }
+    for(int i=0;i<c;i++){
+     // System.out.print(cumCol[i]+" ");
+    }
+   // System.out.println();
+   
+   
+   
+    //col cuts
+    List<Integer> colcut = new ArrayList<Integer>();
+      //average number numebr
+      double averageNum2 = cumCol[cumCol.length-1]/(v+1);
+      //each row
+     //System.out.println(averageNum2);
+      //interval list
+     
+     
+     
+         colcut.add(0);
+        if(averageNum2==0){
+           return "POSSIBLE";
+         }else if(cumCol[0]%averageNum2==0 &&cumCol[0]!=0 ){
+           colcut.add(1);
+         }
+       for(int i=1;i<cumCol.length-1;i++){
+         if(averageNum2==0){
+           return "POSSIBLE";
+         }else if(cumCol[i]%averageNum2==0&&cumCol[i]!=cumCol[i-1] &&cumCol[i]!=cumCol[cumCol.length-1]){
+           colcut.add(i+1);
+         }
+       }
+        colcut.add(matrix[0].length);
+     
+      for(int i=0;i<colcut.size();i++){
+       // System.out.print(colcut.get(i)+" ");
+      }
+    // System.out.println(" ");
+//-----------------------------------
+    if (colcut.size()!=v+2||rowcut.size()!=h+2){
+        return "IMPOSSIBLE";
+    }
+    double numChip = averageNum/(v+1);
+    //System.out.println(numChip);
+
+    //check piece
+    int size = rowcut.size();
+    int[] rcut = new int[size];
+    Integer[] temp = rowcut.toArray(new Integer[size]);
+    for (int n = 0; n < size; ++n) {
+        rcut[n] = temp[n];
+    }
+    int size2 = colcut.size();
+    int[] ccut = new int[size2];
+    Integer[] temp2 = colcut.toArray(new Integer[size2]);
+    for (int n = 0; n < size2; ++n) {
+        ccut[n] = temp2[n];
+    }
+        
+    
+    
+    for (int q=0;q<rcut.length-1;q++){
+        for (int w=0;w<ccut.length-1;w++){
+    
+    int rowstart, rowend;
+    int colstart, colend;
+    int pieceCount=0;
+    rowstart = rcut[q];
+    rowend = rcut[q+1];
+    colstart =ccut[w];
+    colend = ccut[w+1];
+    
+    
+    for(int i=rowstart;i<rowend;i++){
+        for(int k=colstart;k<colend;k++){
+            if(matrix[i][k].equals("@")){
+                pieceCount++;
+            }
+        }
+    }
+    if(pieceCount!=numChip){
+        return "IMPOSSIBLE";
+    }
+    
+        }
+    }
+    return "POSSIBLE";
+  }
+   
+}
+
+
